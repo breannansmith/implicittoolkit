@@ -1,0 +1,18 @@
+set( Sources
+  ContentWidget.cpp
+  GLWidget.cpp
+  OpenGL3DSphereRenderer.cpp
+  OrthographicCameraController.cpp
+  PerspectiveCameraController.cpp
+  Window.cpp
+  qt4_driver.cpp
+)
+
+set( Headers
+  ContentWidget.h
+  GLWidget.h
+  OpenGL3DSphereRenderer.h
+  OrthographicCameraController.h
+  PerspectiveCameraController.h
+  Window.h
+)

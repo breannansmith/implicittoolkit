@@ -1,0 +1,28 @@
+set( Sources
+  DistanceTools.cpp
+  HDF5File.cpp
+  MeshTools.cpp
+  Moments.cpp
+  ObjParser.cpp
+  ProcessedMeshWriter.cpp
+  Qhull.cpp
+  SignedDistanceField.cpp
+  SphereTree.cpp
+  StringUtilities.cpp
+  SurfaceSampling.cpp
+)
+
+set( Headers
+  DistanceTools.h
+  HDF5File.h
+  MathDefines.h
+  MeshTools.h
+  Moments.h
+  ObjParser.h
+  ProcessedMeshWriter.h
+  Qhull.h
+  SignedDistanceField.h
+  SphereTree.h
+  StringUtilities.h
+  SurfaceSampling.h
+)

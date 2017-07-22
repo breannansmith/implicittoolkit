@@ -1,0 +1,8 @@
+set( Sources
+  MarchingCubes.cpp
+)
+
+set( Headers
+  LookUpTable.h
+  MarchingCubes.h
+)

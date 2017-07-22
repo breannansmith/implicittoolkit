@@ -1,0 +1,41 @@
+# Note: Intel makes one remove unwanted flags
+if( STRICT_BUILD )
+  # Enable as many warnings as possible
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror-all -Wcheck -w3" )
+
+  # Remove warnings that cause issues
+  #    383: value copied to temporary, reference to temporary used
+  #    981: operands are evaluated in unspecified order
+  #   1418: external function definition with no prior declaration
+  #   1572: floating-point equality and inequality comparisons are unreliable
+  #   2259: non-pointer conversion from "int" to "uchar={unsigned char}" may lose significant bits
+  #  11074: Inlining inhibited by limit max-size 
+  #  11076: To get full report use -qopt-report=4 -qopt-report-phase ipo
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd383,981,1418,1572,2259,11074,11076" )
+endif()
+
+# Disable run time type information
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti" )
+
+# Add a custom -isystem command due to lack of Intel compiler features in CMake
+if( APPLE )
+  set( CMAKE_INCLUDE_SYSTEM_FLAG_C "-isystem " )
+  set( CMAKE_INCLUDE_SYSTEM_FLAG_CXX "-isystem " )
+endif()
+
+# Explicit -std=c++14 to work around lack of support for compiler features for Intel in CMake
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14" )
+
+# N.B. Significant performance degradation with So-bogus with -xHost and without -fp-model strict
+# N.B. -xHost -fp-model strict seems slower on all platforms with Sobogus
+set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -ip" )
+
+# The Intel compilers do not support sanitizers
+if( NOT SANITIZER STREQUAL "none" )
+  message( FATAL_ERROR "Error, the Intel compiler suite does not support sanitizers." )
+endif()
+
+# TODO: Add code coverage support with Intel
+if( CMAKE_BUILD_TYPE STREQUAL "Coverage" )
+  message( FATAL_ERROR "Error, code coverage support is not enabled with Intel compilers, yet." )
+endif()
