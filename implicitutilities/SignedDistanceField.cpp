@@ -32,7 +32,7 @@ void SignedDistanceField::initializeCenteredGrid( const Eigen::Matrix<scalar,6,1
   inflated_bounding_box.segment<3>( 3 ) += grid_padding;
 
   assert( ( cell_width.array() > 0.0 ).all() );
-  m_grid_dimensions = ( ( inflated_bounding_box.segment<3>( 3 ) - inflated_bounding_box.segment<3>( 0 ) ).array() / cell_width.array() ).unaryExpr(std::ptr_fun(ceil)).cast<unsigned>() + 1;;
+  m_grid_dimensions = ( ( inflated_bounding_box.segment<3>( 3 ) - inflated_bounding_box.segment<3>( 0 ) ).array() / cell_width.array() ).unaryExpr([](scalar s){return ceil(s);}).cast<unsigned>() + 1;;
   assert( ( m_grid_dimensions.array() >= 2 ).all() );
 
   // Compute the width of the grid
@@ -159,7 +159,7 @@ Vector3s SignedDistanceField::evaluateGradient( const Vector3s& x ) const
   assert( ( x.array() <= gridEnd().array() ).all() );
 
   // Determine which cell this piont lies within
-  const Array3u indices = ( ( x - m_grid_start ).array() / m_cell_delta.array() ).unaryExpr( std::ptr_fun( floor ) ).cast<unsigned>();
+  const Array3u indices = ( ( x - m_grid_start ).array() / m_cell_delta.array() ).unaryExpr( [](scalar s){return floor(s);} ).cast<unsigned>();
   assert( ( indices + 1 < m_grid_dimensions.array() ).all() );
 
   // Compute the 'barycentric' (and one minus) coordinates of the point in the cell
@@ -220,7 +220,7 @@ bool SignedDistanceField::pointIsWithinIsosurface( const Vector3s& x, const scal
 scalar SignedDistanceField::computeDistanceToSurface( const Vector3s& x ) const
 {
   // Determine which cell this point lies in
-  const Vector3u indices = ( ( x - m_grid_start ).array() / m_cell_delta.array() ).unaryExpr( std::ptr_fun( floor ) ).cast<unsigned>();
+  const Vector3u indices = ( ( x - m_grid_start ).array() / m_cell_delta.array() ).unaryExpr( [](scalar s){return floor(s);} ).cast<unsigned>();
   assert( ( indices.array() < m_grid_dimensions.array() ).all() );
 
   // Handle points on the 'right' boundary of the grid

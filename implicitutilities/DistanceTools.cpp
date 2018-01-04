@@ -1,4 +1,5 @@
 #include "DistanceTools.h"
+#include <functional>
 
 #include <Eigen/Geometry>
 
@@ -161,8 +162,8 @@ static void computeEdgeTriangleIntersectionCountWithSpatialSubdivision( const Ar
 
     // Compute the grid indices that bound the bounding box
     Eigen::Array<unsigned,6,1> bounding_indices;
-    bounding_indices.segment<3>( 0 ) = ( ( bounding_box.segment<3>( 0 ) - grid_start ) / cell_width ).unaryExpr( std::ptr_fun( floor ) ).cast<unsigned>();
-    bounding_indices.segment<3>( 3 ) = ( ( bounding_box.segment<3>( 3 ) - grid_start ) / cell_width ).unaryExpr( std::ptr_fun( ceil ) ).cast<unsigned>();
+    bounding_indices.segment<3>( 0 ) = ( ( bounding_box.segment<3>( 0 ) - grid_start ) / cell_width ).unaryExpr( [](scalar s){return floor(s);} ).cast<unsigned>();
+    bounding_indices.segment<3>( 3 ) = ( ( bounding_box.segment<3>( 3 ) - grid_start ) / cell_width ).unaryExpr( [](scalar s){return ceil(s);}).cast<unsigned>();
     assert( ( bounding_indices.segment<3>( 0 ) <= bounding_indices.segment<3>( 3 ) ).all() );
     assert( ( bounding_indices.segment<3>( 0 ) < num_samples ).all() ); assert( ( bounding_indices.segment<3>( 3 ) < num_samples ).all() );
     computeEdgeTriangleIntersectionsGivenBoundingIndices( grid_start, cell_width, vertices, triangles, static_cast<unsigned int>(cur_tri), bounding_indices, intersection_count );
