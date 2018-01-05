@@ -63,6 +63,7 @@ option( USE_QHULL "Support for Qhull in the implicit toolkit" ON )
 
 add_subdirectory( marchingcubes )
 add_subdirectory( implicitutilities )
+add_subdirectory( implicittoolkitcli )
 if( USE_QT4 )
   add_subdirectory( implicittoolkitqt4 )
 endif()
